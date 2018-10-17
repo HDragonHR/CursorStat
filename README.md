@@ -1,5 +1,5 @@
 # CursorStat
-A simple python script to display cursor status.
+A simple python script to display cursor x speed and y speed.
 
 Written primarily for use with osu! and OBS Studio.
 
