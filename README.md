@@ -4,7 +4,7 @@ A simple python script to display cursor status.
 Written primarily for use with osu! and OBS Studio.
 
 # To Do List
-Improve accuracy of measurement.
+Use better logic for measurement.
 
 Include acceleration of cursor.
 
