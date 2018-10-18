@@ -13,3 +13,5 @@ Allow user to choose green screen or white background.
 Enable resizing of window.
 
 Display on top of osu!.
+
+Use a dampener for suddden change in values, similar to pp counter.
