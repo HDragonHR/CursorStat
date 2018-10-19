@@ -5,7 +5,7 @@
 - Now shows Euclidean speed instead of x and y speeds
 
 # CursorStat v0.1
-A simple python script to display cursor x speed and y speed.
+A simple python script to display cursor' Euclidean speed.
 
 Written primarily for use with osu! and OBS Studio.
 
