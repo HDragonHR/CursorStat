@@ -24,9 +24,9 @@ class Application(tk.Frame):
     def __init__(self, master):
         
         self.label1=tk.Label(master)
-        self.label1.grid(row=0, column=100)
+        self.label1.grid(row=0, column=40)
         self.label1.configure(text='')
-        self.label1.config(fg="#ffffff",bg="#00ff00",font=("Courier",40))
+        self.label1.config(fg="#ffffff",bg="#00ff00",font=("Courier",40),anchor="w")
         self.count = 0
 
         self.label5=tk.Label(master)
@@ -34,16 +34,22 @@ class Application(tk.Frame):
         self.label5.configure(text='Speed : ')
         self.label5.config(fg="#ffffff",bg="#00ff00",font=("Courier",40))
 
-        self.update_labels()
+        self.update()
 
-    def update_labels(self):
-        capture()
-        self.label1.configure(text = self.count)
-        self.label1.after(100, self.update_labels) # call this method again in 1,000 milliseconds
+    def update_label(self):
         x_diff = x_arr[-1] - x_arr[0]
         y_diff = y_arr[-1] - y_arr[0]
-        self.count = math.sqrt((x_diff**2)+(y_diff**2))
-         
+        self.count = (math.sqrt((x_diff**2)+(y_diff**2)))*2
+        self.label1.configure(text = round(self.count, 0))
+
+    def update(self):
+        i = 0
+        while True and i < 2:
+            capture()
+            time.sleep(250.0/1000.0)
+            i += 1
+        self.update_label()
+        self.label1.after(1, self.update)
         
 app = tk.Tk()
 app.geometry("620x70")
