@@ -1,16 +1,4 @@
-# CursorStat v0.3
-- Multiply result by two to account for one second.
-- Separated capture from label update.
-- Capture now repeats every 250 ms, label update occurs every 500 ms.
-- Rounded up the numbers to nearest 0 decimal place.
-
-# CursorStat v0.2
-- Removed unnecessary threading
-- Changed sleep interval between capture to 500 ms
-- Reduced CPU usage
-- Now shows Euclidean speed instead of x and y speeds
-
-# CursorStat v0.1
+# CursorStat
 A simple python script to display cursor' Euclidean speed.
 
 Written primarily for use with osu! and OBS Studio.
