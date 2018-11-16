@@ -1,9 +1,9 @@
 #from https://stackoverflow.com/questions/3698635/getting-cursor-position-in-python
 
-import time
 import math
 import threading
 import tkinter as tk
+from time import sleep
 from collections import deque
 from ctypes import windll, Structure, c_long, byref
 
