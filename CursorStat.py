@@ -1,9 +1,9 @@
 #from https://stackoverflow.com/questions/3698635/getting-cursor-position-in-python
 
+import time
 import math
 import threading
 import tkinter as tk
-from time import sleep
 from collections import deque
 from ctypes import windll, Structure, c_long, byref
 
@@ -13,34 +13,24 @@ class POINT(Structure):
 pt = POINT()
 Lock = threading.Lock()
 
-x = deque([0], maxlen = 250)
-y = deque([0], maxlen = 250)
+x = deque([0], maxlen = 2500)
+y = deque([0], maxlen = 2500)
 dist_arr = deque()
 
 sum_dist = 0.0
 sum_delta_dist = 0.0
+max_spd = 0.0
+max_acl = 0.0
 
 dist = deque([0], maxlen = 1)
 accel = deque([0], maxlen = 1)
 
-update_rate = 100
+update_rate = 200
 
 def capture():
     windll.user32.GetCursorPos(byref(pt))
     x.append(pt.x)
     y.append(pt.y)
-
-class CapThread (threading.Thread):
-    def __init__(self, threadID, name):
-        threading.Thread.__init__(self)
-        self.threadID = threadID
-        self.name = name
-    def run(self):
-        while True:
-            Lock.acquire()
-            capture()
-            Lock.release()
-            time.sleep(1.0/10000.0)
 
 def calc():
     global sum_dist, sum_delta_dist  
@@ -56,6 +46,18 @@ def calc():
 
     dist.append(sum_dist)
     accel.append(sum_delta_dist)  
+
+class CapThread (threading.Thread):
+    def __init__(self, threadID, name):
+        threading.Thread.__init__(self)
+        self.threadID = threadID
+        self.name = name
+    def run(self):
+        while True:
+            Lock.acquire()
+            capture()
+            Lock.release()
+            time.sleep(1.0/10000.0)
 
 class CopyThread (threading.Thread):    
     def __init__(self, threadID, name):
@@ -105,18 +107,57 @@ class Application(tk.Frame):
         self.label4.configure(text='Accel : ')
         self.label4.config(fg="#ffffff",bg="#00ff00",font=("Courier",40))
 
+
+
+        self.label5=tk.Label(master)
+        self.label5.grid(row=80, column=40)
+        self.label5.configure(text='')
+        self.label5.config(fg="#ffffff",bg="#00ff00",font=("Courier",40),anchor="w")
+        self.count3 = 0
+
+        self.label6=tk.Label(master)
+        self.label6.grid(row=80, column=0)
+        self.label6.configure(text='Max Spd : ')
+        self.label6.config(fg="#ffffff",bg="#00ff00",font=("Courier",40))
+
+        self.label7=tk.Label(master)
+        self.label7.grid(row=160, column=40)
+        self.label7.configure(text='')
+        self.label7.config(fg="#ffffff",bg="#00ff00",font=("Courier",40),anchor="w")
+        self.count4 = 0
+
+        self.label8=tk.Label(master)
+        self.label8.grid(row=160, column=0)
+        self.label8.configure(text='Max Acl : ')
+        self.label8.config(fg="#ffffff",bg="#00ff00",font=("Courier",40))
+
         self.update()
 
     def update_label(self):
-        self.label1.configure(text = round(dist[0]/(update_rate/1000), 0))
-        self.label2.configure(text = round(abs(accel[0])/(update_rate/1000), 0))
+
+        global max_spd, max_acl
+
+        current_speed = round(dist[0]/(update_rate/1000), 0)
+        current_accel = round(abs(accel[0])/(update_rate/1000), 0)
+        
+        self.label1.configure(text = current_speed)
+        self.label2.configure(text = current_accel)
+
+        if current_speed > max_spd:
+            max_spd = current_speed
+
+        if current_accel > max_acl:
+            max_acl = current_accel
+        
+        self.label5.configure(text = max_spd)
+        self.label7.configure(text = max_acl)
 
     def update(self):
         self.update_label()
         self.label1.after(update_rate, self.update)
 
 app = tk.Tk()
-app.geometry("620x140")
+app.geometry("620x260")
 app.config(bg="#00ff00")
 Application(app)                       
 app.title('CursorStat')
